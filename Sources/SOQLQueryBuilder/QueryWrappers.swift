@@ -20,8 +20,12 @@ public struct QueryGroup: PartialQuery {
   }
 }
 
-public struct FieldGroup: PartialQuery {
+public struct FieldGroup: PartialQuery, FieldConvertible {
   let fields: [FieldConvertible]
+
+  public var asString: String {
+    build()
+  }
 
   public init(_ fields: [FieldConvertible]) {
     self.fields = fields
