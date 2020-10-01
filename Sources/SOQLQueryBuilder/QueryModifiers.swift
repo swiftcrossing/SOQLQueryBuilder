@@ -1,10 +1,12 @@
 
 public struct Select<T: Table>: PartialQuery, SelectType {
   let table: T.Type
+  let relationshipName: String?
   let queryGroup: QueryGroup
 
-  public init(from table: T.Type, @SOQLFunctionBuilder builder: (T.Type) -> PartialQuery) {
+  public init(from table: T.Type, relationshipName: String? = nil, @SOQLFunctionBuilder builder: (T.Type) -> PartialQuery) {
     self.table = table
+    self.relationshipName = relationshipName
     queryGroup = builder(table).asQueryGroup
   }
 
@@ -23,9 +25,10 @@ public struct Select<T: Table>: PartialQuery, SelectType {
       ? [InnerQuery(innerQueries)]
       : []
     let allFields = fields + innerQueryFields
+    let tableName = relationshipName ?? table.name
     return "SELECT+" + allFields
       .map({ $0.build() })
-      .joined(separator: ",") + "+FROM+" + table.name
+      .joined(separator: ",") + "+FROM+" + tableName
   }
 }
 
