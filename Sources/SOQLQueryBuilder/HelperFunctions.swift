@@ -7,7 +7,7 @@ func flattenQuery(_ query: PartialQuery) -> [PartialQuery] {
   }
 }
 
-func wrap(_ string: String, if condition: @autoclosure () -> Bool) -> String {
+func wrap(_ string: String, if condition: @autoclosure () -> Bool = true) -> String {
   condition() ? "(" + string + ")" : string
 }
 

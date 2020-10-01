@@ -35,3 +35,20 @@ public struct FieldGroup: PartialQuery, FieldConvertible {
     fields.map(\.asString).joined(separator: ",")
   }
 }
+
+public struct InnerQuery: PartialQuery {
+  var queries: [PartialQuery] {
+    allQueries
+      .filter({ !($0 is EmptyQuery) })
+      .flatMap(flattenQuery)
+  }
+  private let allQueries: [PartialQuery]
+
+  public init(_ allQueries: [PartialQuery]) {
+    self.allQueries = allQueries
+  }
+
+  public func build() -> String {
+    wrap(queries.map({ $0.build() }).joined())
+  }
+}

@@ -9,8 +9,22 @@ public struct Select<T: Table>: PartialQuery, SelectType {
   }
 
   public func build() -> String {
-    "SELECT+" + queryGroup.queries
-      .map({ wrap($0.build(), if: $0 is SelectType) })
+    let (fields, innerQueries) = queryGroup.queries
+      .reduce(([], []), { (acc, next) -> ([PartialQuery], [PartialQuery]) in
+        var (fields, innerQueries) = acc
+        if next is FieldConvertible {
+          fields.append(next)
+        } else {
+          innerQueries.append(next)
+        }
+        return (fields, innerQueries)
+      })
+    let innerQueryFields = !innerQueries.isEmpty
+      ? [InnerQuery(innerQueries)]
+      : []
+    let allFields = fields + innerQueryFields
+    return "SELECT+" + allFields
+      .map({ $0.build() })
       .joined(separator: ",") + "+FROM+" + table.name
   }
 }
