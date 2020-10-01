@@ -164,11 +164,15 @@ public struct GroupByCube: PartialQuery {
   }
 }
 
-public struct Relation<T: Table>: PartialQuery, RelationType {
+public struct Relation<T: Table>: PartialQuery, RelationType, FieldConvertible {
   let relationshipName: String?
   let queryGroup: QueryGroup
   private var resolvedRelationshipName: String {
     (relationshipName ?? T.name).replacingOrAddingSuffix("__c", with: "__r")
+  }
+
+  public var asString: String {
+    build()
   }
 
   public init(from relationship: T.Type, relationshipName: String? = nil, @SOQLFunctionBuilder builder: (T.Type) -> PartialQuery) {
