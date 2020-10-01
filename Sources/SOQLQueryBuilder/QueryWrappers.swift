@@ -11,7 +11,7 @@ public struct QueryGroup: PartialQuery {
   }
   private let allQueries: [PartialQuery]
 
-  init(_ allQueries: [PartialQuery]) {
+  public init(_ allQueries: [PartialQuery]) {
     self.allQueries = allQueries
   }
 
@@ -23,7 +23,7 @@ public struct QueryGroup: PartialQuery {
 public struct FieldGroup: PartialQuery {
   let fields: [FieldConvertible]
 
-  init(_ fields: [FieldConvertible]) {
+  public init(_ fields: [FieldConvertible]) {
     self.fields = fields
   }
 
