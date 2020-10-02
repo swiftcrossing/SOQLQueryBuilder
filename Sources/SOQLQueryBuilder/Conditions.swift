@@ -52,7 +52,7 @@ public struct NotEqual: PartialQuery, ValueQuery {
   }
 
   public func build() -> String {
-    "\(field.asString)+=+\(value.asQueryString)"
+    "\(field.asString)+!=+\(value.asQueryString)"
   }
 }
 
