@@ -21,12 +21,12 @@ public enum Value {
     case .double(let doubleValue):
       return "\(doubleValue)"
     case .date(let dateValue):
+      #warning("Convert to Salesforce Date format (yyyy-mm-dd)")
       return "\(dateValue)"
     case .dateTime(let dateValue):
       #warning("Convert to Salesforce DateTime format (yyyy-mm-ddThh-mm-ss.sssZ)")
       return "\(dateValue)"
     case .dateLiteral(let dateLiteralValue):
-      #warning("Convert to Salesforce Date format (yyyy-mm-dd)")
       return dateLiteralValue.asValue
     }
   }
