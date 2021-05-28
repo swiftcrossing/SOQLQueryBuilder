@@ -26,9 +26,8 @@ public struct Select<T: Table>: PartialQuery, SelectType {
       : []
     let allFields = fields + innerQueryFields
     let tableName = relationshipName ?? table.name
-    return "SELECT+" + allFields
-      .map({ $0.build() })
-      .joined(separator: ",") + "+FROM+" + tableName
+    let fieldsString = allFields.map({ $0.build() }).joined(separator: ",")
+    return ["SELECT", fieldsString, "FROM", tableName].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -40,9 +39,7 @@ public struct Where: PartialQuery {
   }
 
   public func build() -> String {
-    "+WHERE+" + queryGroup.queries
-      .map({ $0.build() })
-      .joined()
+    ["", "WHERE", queryGroup.queries.map({ $0.build() }).joined()].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -63,8 +60,17 @@ public struct OrderBy: PartialQuery {
   }
 
   public enum NullOrder: String {
-    case first = "NULLS+FIRST"
-    case last = "NULLS+LAST"
+    case first
+    case last
+
+    var displayValue: String {
+      switch self {
+      case .first:
+        return ["NULLS", "FIRST"].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
+      case .last:
+        return ["NULLS", "LAST"].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
+      }
+    }
   }
 
   public struct Conditions {
@@ -79,9 +85,9 @@ public struct OrderBy: PartialQuery {
     }
 
     var asString: String {
-      ["+ORDER+BY+\(field.asString)", orderDescriptor?.rawValue.uppercased(), nullOrder?.rawValue]
+      ["", "ORDER", "BY", field.asString, orderDescriptor?.rawValue.uppercased(), nullOrder?.displayValue]
         .compactMap({ $0 })
-        .joined(separator: "+")
+        .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
     }
   }
 
@@ -115,7 +121,7 @@ public struct Limit: PartialQuery {
   }
 
   public func build() -> String {
-    "+LIMIT+\(limit)"
+    ["", "LIMIT", String(limit)].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -127,7 +133,7 @@ public struct Offset: PartialQuery {
   }
 
   public func build() -> String {
-    "+OFFSET+\(offset)"
+    ["", "OFFSET", String(offset)].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -139,7 +145,7 @@ public struct GroupBy: PartialQuery {
   }
 
   public func build() -> String {
-    "+GROUP+BY+\(field.asString)"
+    ["", "GROUP", "BY", field.asString].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -151,7 +157,8 @@ public struct GroupByRollup: PartialQuery {
   }
 
   public func build() -> String {
-    "+GROUP+BY+ROLLUP(\(fields.map(\.asString).joined(separator: ",")))"
+    ["", "GROUP", "BY", "ROLLUP(\(fields.map(\.asString).joined(separator: ",")))"]
+      .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -163,7 +170,8 @@ public struct GroupByCube: PartialQuery {
   }
 
   public func build() -> String {
-    "+GROUP+BY+CUBE(\(fields.map(\.asString).joined(separator: ",")))"
+    ["", "GROUP", "BY", "CUBE(\(fields.map(\.asString).joined(separator: ",")))"]
+      .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -212,7 +220,8 @@ public struct And: PartialQuery {
   public func build() -> String {
     queryGroup.queries
       .map({ wrap($0.build(), if: $0 is Or && queryGroup.queries.count > 1) })
-      .joined(separator: "+AND+")
+      .joined(separator: ["", "AND", ""].joined(separator: SOQLFunctionBuilder.whitespaceCharacter))
+
   }
 }
 
@@ -226,6 +235,6 @@ public struct Or: PartialQuery {
   public func build() -> String {
     queryGroup.queries
       .map({ wrap($0.build(), if: $0 is And && queryGroup.queries.count > 1) })
-      .joined(separator: "+OR+")
+      .joined(separator: ["", "OR", ""].joined(separator: SOQLFunctionBuilder.whitespaceCharacter))
   }
 }

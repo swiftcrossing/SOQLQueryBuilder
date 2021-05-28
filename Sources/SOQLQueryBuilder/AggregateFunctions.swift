@@ -21,7 +21,7 @@ public struct Avg: FieldConvertible {
   public var asString: String {
     ["AVG(\(field.asString))", alias]
       .compactMap({ $0 })
-      .joined(separator: "+")
+      .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -59,7 +59,7 @@ public struct Count: FieldConvertible {
   public var asString: String {
     ["COUNT(\(field?.asString ?? ""))", alias]
       .compactMap({ $0 })
-      .joined(separator: "+")
+      .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -87,7 +87,7 @@ public struct CountDistinct: FieldConvertible {
   public var asString: String {
     ["COUNT_DISTINCT(\(field?.asString ?? ""))", alias]
       .compactMap({ $0 })
-      .joined(separator: "+")
+      .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -116,7 +116,7 @@ public struct MIN: FieldConvertible {
   public var asString: String {
     ["MIN(\(field?.asString ?? ""))", alias]
       .compactMap({ $0 })
-      .joined(separator: "+")
+      .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -142,7 +142,7 @@ public struct MAX: FieldConvertible {
   public var asString: String {
     ["MAX(\(field?.asString ?? ""))", alias]
       .compactMap({ $0 })
-      .joined(separator: "+")
+      .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -168,6 +168,6 @@ public struct SUM: FieldConvertible {
   public var asString: String {
     ["SUM(\(field?.asString ?? ""))", alias]
       .compactMap({ $0 })
-      .joined(separator: "+")
+      .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }

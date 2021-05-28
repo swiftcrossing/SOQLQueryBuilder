@@ -9,7 +9,7 @@ public struct Null: PartialQuery {
   }
 
   public func build() -> String {
-    return "\(field.asString)+=+null"
+    [field.asString, "=", "null"].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -21,7 +21,7 @@ public struct NotNull: PartialQuery {
   }
 
   public func build() -> String {
-    return "\(field.asString)+!=+null"
+    [field.asString, "!=", "null"].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -37,7 +37,7 @@ public struct Equal: PartialQuery, ValueQuery {
   }
 
   public func build() -> String {
-    "\(field.asString)+=+\(value.asQueryString)"
+    [field.asString, "=", value.asQueryString].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -52,7 +52,7 @@ public struct NotEqual: PartialQuery, ValueQuery {
   }
 
   public func build() -> String {
-    "\(field.asString)+!=+\(value.asQueryString)"
+    [field.asString, "!=", value.asQueryString].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -67,7 +67,7 @@ public struct LessThan: PartialQuery, ValueQuery {
   }
 
   public func build() -> String {
-    "\(field.asString)+<+\(value.asQueryString)"
+    [field.asString, "<", value.asQueryString].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -82,7 +82,7 @@ public struct LessThanOrEqualTo: PartialQuery, ValueQuery {
   }
 
   public func build() -> String {
-    "\(field.asString)+<=+\(value.asQueryString)"
+    [field.asString, "<=", value.asQueryString].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -97,7 +97,7 @@ public struct GreaterThan: PartialQuery, ValueQuery {
   }
 
   public func build() -> String {
-    "\(field.asString)+>+\(value.asQueryString)"
+    [field.asString, ">", value.asQueryString].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -112,7 +112,7 @@ public struct GreaterThanOrEqualTo: PartialQuery, ValueQuery {
   }
 
   public func build() -> String {
-    "\(field.asString)+>=+\(value.asQueryString)"
+    [field.asString, ">=", value.asQueryString].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -144,7 +144,7 @@ public struct Like: PartialQuery, ValueQuery {
   }
 
   public func build() -> String {
-    "\(field.asString)+LIKE+\(value.asQueryString)"
+    [field.asString, "LIKE", value.asQueryString].joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
   }
 }
 
@@ -177,9 +177,11 @@ public struct In: PartialQuery, ValuesQuery {
 
   public func build() -> String {
     if let values = values {
-      return "\(field.asString)+IN+(\(values.map(\.asQueryString).joined(separator: ",")))"
+      return [field.asString, "IN", "(\(values.map(\.asQueryString).joined(separator: ",")))"]
+        .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
     } else if let queryGroup = queryGroup {
-      return "\(field.asString)+IN+(\(queryGroup.queries.map({ $0.build() }).joined()))"
+      return [field.asString, "IN", "(\(queryGroup.queries.map({ $0.build() }).joined()))"]
+        .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
     } else {
       return ""
     }
@@ -215,9 +217,11 @@ public struct NotIn: PartialQuery, ValuesQuery {
 
   public func build() -> String {
     if let values = values {
-      return "\(field.asString)+NOT+IN+(\(values.map(\.asQueryString).joined(separator: ",")))"
+      return [field.asString, "NOT", "IN", "(\(values.map(\.asQueryString).joined(separator: ",")))"]
+        .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
     } else if let queryGroup = queryGroup {
-      return "\(field.asString)+NOT IN+(\(queryGroup.queries.map({ $0.build() }).joined()))"
+      return [field.asString, "NOT", "IN", "(\(queryGroup.queries.map({ $0.build() }).joined()))"]
+        .joined(separator: SOQLFunctionBuilder.whitespaceCharacter)
     } else {
       return ""
     }

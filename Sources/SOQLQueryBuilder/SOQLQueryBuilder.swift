@@ -4,6 +4,8 @@ import Foundation
 
 @resultBuilder
 public struct SOQLFunctionBuilder {
+  public static var whitespaceCharacter: WhitespaceCharacter = .space
+
   public static func buildBlock(_ queries: PartialQuery...) -> PartialQuery {
     QueryGroup(queries)
   }

@@ -2,6 +2,11 @@ import XCTest
 @testable import SOQLQueryBuilder
 
 final class SOQLQueryBuilderTests: XCTestCase {
+  override class func setUp() {
+    super.setUp()
+    SOQLFunctionBuilder.whitespaceCharacter = .plus
+  }
+
   @SOQLFunctionBuilder
   func makeQuery(condition1: Bool, condition2: Bool, condition3: Bool) -> PartialQuery {
     Select(from: Test1Table.self) { test1 in
