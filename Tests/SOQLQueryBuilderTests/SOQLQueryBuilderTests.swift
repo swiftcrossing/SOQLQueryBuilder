@@ -52,7 +52,7 @@ final class SOQLQueryBuilderTests: XCTestCase {
 
   func test2() {
     let queryString = makeQuery(condition1: true, condition2: true, condition3: true).build()
-    let expectedString = #"SELECT+Id,Name,Field1__c,Field2__c,OrderItemNo__r.Id,OrderItemNo__r.Name,OrderItemNo__r.Test3__r.Id,OrderItemNo__r.Test3__r.Name,OrderItemNo__r.Test3__r.Field6__c,OrderItemNo__r.Test3__r.Field7__c,OrderItemNo__r.Test3__r.Field8__c,(SELECT+Id,Name,Field3__c,Field4__c,Field5__c+FROM+Test2)+FROM+Test1__c+WHERE+(Id+=+'StringValue'+AND+Name+=+1+AND+Field1__c+!=+null)+OR+Field2__c+IN+('AAA','BBB')+OR+(Field1__c+=+1.0+AND+Field1__c+=+true+AND+Field1__c+=+null)"#
+    let expectedString = #"SELECT+Id,Name,Field1__c,Field2__c,OrderItemNo__r.Id,OrderItemNo__r.Name,OrderItemNo__r.Test3__r.Id,OrderItemNo__r.Test3__r.Name,OrderItemNo__r.Test3__r.Field6__c,OrderItemNo__r.Test3__r.Field7__c,OrderItemNo__r.Test3__r.Field8__c,(SELECT+Id,Name,Field3__c,Field4__c,Field5__c+FROM+Test2)+FROM+Test1__c+WHERE+(Id+!=+'StringValue'+AND+Name+=+1+AND+Field1__c+!=+null)+OR+Field2__c+IN+('AAA','BBB')+OR+(Field1__c+=+1.0+AND+Field1__c+!=+true+AND+Field1__c+=+null)"#
     XCTAssertEqual(queryString, expectedString)
   }
 
