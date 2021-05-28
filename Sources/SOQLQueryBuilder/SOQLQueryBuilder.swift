@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Function builder
 
-@_functionBuilder
+@resultBuilder
 public struct SOQLFunctionBuilder {
   public static func buildBlock(_ queries: PartialQuery...) -> PartialQuery {
     QueryGroup(queries)
