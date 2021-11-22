@@ -21,15 +21,31 @@ public enum Value {
     case .double(let doubleValue):
       return "\(doubleValue)"
     case .date(let dateValue):
-      #warning("Convert to Salesforce Date format (yyyy-mm-dd)")
-      return "\(dateValue)"
+      return Value.sfdcDateFormatter.string(from: dateValue)
     case .dateTime(let dateValue):
-      #warning("Convert to Salesforce DateTime format (yyyy-mm-ddThh-mm-ss.sssZ)")
-      return "\(dateValue)"
+      return Value.sfdcDateTimeFormatter.string(from: dateValue)
     case .dateLiteral(let dateLiteralValue):
       return dateLiteralValue.asValue
     }
   }
+
+  private static let sfdcDateTimeFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.calendar = Calendar(identifier: .gregorian)
+    formatter.locale = Locale(identifier: "UTC")
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZ"
+    return formatter
+  }()
+
+  private static let sfdcDateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.calendar = Calendar(identifier: .gregorian)
+    formatter.locale = Locale(identifier: "UTC")
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter
+  }()
 }
 
 /// A *fieldExpression* can use a date literal to compare a range of values to the value in a *date* or *dateTime* field. Each literalis a range of time beginning with midnight (00:00:00).

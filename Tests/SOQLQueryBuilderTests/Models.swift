@@ -40,7 +40,7 @@ struct Test3Table: Table {
 }
 
 struct Test4Table: Table {
-  static let name = "Test3__c"
+  static let name = "Test4__c"
 
   enum Field: String, CaseIterable, FieldConvertible {
     case id = "Id"
