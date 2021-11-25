@@ -24,6 +24,12 @@ public extension FieldConvertible where Self: CaseIterable {
   }
 }
 
+public extension FieldConvertible where Self: CaseIterable, Self: Equatable {
+  static func allFields(excluding cases: Self...) -> FieldGroup {
+    FieldGroup(allCases.filter({ !cases.contains($0) }).map(\.asString))
+  }
+}
+
 public extension FieldConvertible {
   func build() -> String {
     asString
