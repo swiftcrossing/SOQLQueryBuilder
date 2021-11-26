@@ -32,8 +32,6 @@ public enum Value {
   private static let sfdcDateTimeFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.calendar = Calendar(identifier: .gregorian)
-    formatter.locale = Locale(identifier: "UTC")
-    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZ"
     return formatter
   }()
@@ -41,8 +39,6 @@ public enum Value {
   private static let sfdcDateFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.calendar = Calendar(identifier: .gregorian)
-    formatter.locale = Locale(identifier: "UTC")
-    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "yyyy-MM-dd"
     return formatter
   }()

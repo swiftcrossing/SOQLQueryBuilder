@@ -5,6 +5,7 @@ final class SOQLQueryBuilderTests: XCTestCase {
   override class func setUp() {
     super.setUp()
     SOQLFunctionBuilder.whitespaceCharacter = .plus
+    NSTimeZone.default = NSTimeZone(forSecondsFromGMT: 0) as TimeZone
   }
 
   @SOQLFunctionBuilder
